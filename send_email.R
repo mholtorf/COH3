@@ -2,7 +2,7 @@
 library("blastula")
 
 # # Create file containing credentials for email account
-# create_smtp_creds_key(
+# blastula::create_smtp_creds_key(
 #   id = "gmail",
 #   user = "megan.holtorf@gmail.com",
 #   host = "smtp.gmail.com",
@@ -14,7 +14,7 @@ library("blastula")
 # To use gmail, go to My Account Help page and search for App passwords
 # Generate an App password and enter it in the pop up dialog after running code below
 # File is saved to your current working directory
-# create_smtp_creds_file(
+# blastula::create_smtp_creds_file(
 #   file = "gmail_creds",
 #   user = "megan.holtorf@gmail.com",
 #   host = "smtp.gmail.com",
@@ -23,7 +23,7 @@ library("blastula")
 # )
 
 # Generate the email object using blastula
-email_object <- render_email("email_content.qmd")
+email_object <- blastula::render_email("email_content.qmd")
 #email_object <- blastula::render_email("email_content.Rmd")
 
 # Send email
