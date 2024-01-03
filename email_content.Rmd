@@ -1,0 +1,61 @@
+---
+title: "Central Oregon Hashes"
+output: blastula::blastula_email
+#output: html_document
+---
+
+## This Week
+```{r echo=FALSE}
+#remotes::install_github("petermeissner/ical")
+
+pacman::p_load("ical",
+               "tidyverse")
+
+events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
+
+events <- 
+  events %>%
+  mutate(description = gsub("\n", "<br>", description),
+         day = as.character(wday(dtstart, label = TRUE, abbr = FALSE)),
+         date = format(dtstart, format = "%B %d"),
+         time = format(dtstart, format = "%I:%M %p")) %>%
+  arrange(dtstart)
+
+week <- 
+  events %>%
+  filter(dtstart >= Sys.Date() &
+          dtstart < Sys.Date() + 7) 
+
+upcoming <- 
+  events %>%
+  filter(dtstart >= Sys.Date() + 7) 
+```
+
+```{r,  echo=FALSE, results = 'asis'}
+for (i in 1:nrow(week)) {
+  cat(paste0("  \n", "### ", week[i, "summary"]))
+  cat('\n')
+  cat("  \n", "**Date:**", week[i, "day"], week[i, "date"])
+  cat("  \n", "**Time:**", week[i, "time"])
+  cat("  \n", "**Where:**", week[i, "location"])
+  cat("  \n\n", week[i, "description"])
+  cat('\n')
+  }
+```
+
+## Other Upcoming Events
+```{r,  echo=FALSE, results = 'asis'}
+if(nrow(upcoming) > 0)
+  for (i in 1:nrow(upcoming)) {
+    cat(paste0("  \n", "### ", upcoming[i, "summary"]))
+    cat('\n')
+    cat("  \n", "**Date:**", upcoming[i, "day"], upcoming[i, "date"])
+    cat("  \n", "**Time:**", upcoming[i, "time"])
+    cat("  \n", "**Where:**", upcoming[i, "location"])
+    cat("  \n\n", upcoming[i, "description"])
+    cat('\n')
+  }
+
+if(nrow(upcoming) == 0)
+  cat("No other upcoming events. [Sign up to hare!](https://sites.google.com/site/centraloregonhhh/home)")
+```
