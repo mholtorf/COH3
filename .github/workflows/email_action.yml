@@ -1,0 +1,35 @@
+on:
+  schedule:
+    - cron: '0 10 * * 1' # Run every Monday at 10 am UTC
+
+jobs:
+  run_email_sender:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install packages
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::tidyverse
+            any::blastula
+            any::ical
+            any::remotes
+
+      - name: Install dev packages
+        run: |
+          remotes::install_github('petermeissner/ical')
+        shell: Rscript {0}
+
+
+      - name: Render email
+        run: Rscript -e 'source("R/send_email.R")'
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
