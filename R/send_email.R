@@ -31,4 +31,4 @@ blastula::smtp_send(email_object,
           from = "megan.holtorf@gmail.com",
           to = "megan.holtorf@gmail.com",
           subject = paste0("Central Oregon Hashes"),
-          credentials = creds_key(id = "GMAIL_APP_PASSWORDkk"))
+          credentials = creds_key(id = "GMAIL_APP_PASSWORD"))
