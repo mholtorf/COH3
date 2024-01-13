@@ -23,8 +23,8 @@ library("blastula")
 # )
 
 # Generate the email object using blastula
-email_object <- blastula::render_email("email_content.qmd")
-#email_object <- blastula::render_email("email_content.Rmd")
+email_object <- blastula::render_email(here::here("R","email_content.qmd"))
+#email_object <- blastula::render_email(here::here("R","email_content.Rmd"))
 
 # Send email
 blastula::smtp_send(email_object,
