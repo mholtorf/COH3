@@ -1,5 +1,6 @@
 # Load blastula package
 library("blastula")
+library("keyring")
 
 # # Create file containing credentials for email account
 # blastula::create_smtp_creds_key(
