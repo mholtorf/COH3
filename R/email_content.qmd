@@ -11,8 +11,8 @@ editor: visual
 
 #remotes::install_github("petermeissner/ical")
 
-pacman::p_load("ical",
-               "tidyverse")
+library("ical")
+library("tidyverse")
 
 events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
 
