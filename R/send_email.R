@@ -1,6 +1,6 @@
 # Load blastula package
 library("blastula")
-library("keyring")
+#library("keyring")
 
 # # Create file containing credentials for email account
 # blastula::create_smtp_creds_key(
@@ -32,4 +32,5 @@ blastula::smtp_send(email_object,
           from = "megan.holtorf@gmail.com",
           to = "megan.holtorf@gmail.com",
           subject = paste0("Central Oregon Hashes"),
-          credentials = creds_key(id = "GMAIL_APP_PASSWORD"))
+          #credentials = creds_file(here::here("gmail_creds")))
+          credentials = creds_file("GMAIL_APP_PASSWORD"))
