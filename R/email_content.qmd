@@ -28,7 +28,8 @@ events <-
                        location),
          description = if_else(is.na(description), 
                           "Detrails to follow", 
-                          location)) %>%
+                          location),
+         description = gsub("facebook\\.com/[a-zA-Z0-9._]+", "", description)) %>%
   arrange(dtstart)
 
 nextweek <- 
@@ -79,7 +80,7 @@ if(nrow(updates) > 0)
 
 if(nrow(nextweek) > 0) 
   {
-  cat('## Upcumming Hashes')
+  cat('## Cumming soon...')
   for (i in 1:nrow(nextweek)) {
     cat(paste0("  \n", "### ", nextweek[i, "summary"]))
     cat('\n')
@@ -92,7 +93,8 @@ if(nrow(nextweek) > 0)
   }
 ```
 
-## Heads (who said head??) up!
+## More shenanigans ahead!
+*(who said head??)*
 
 ```{r}
 #| echo: FALSE
@@ -100,6 +102,9 @@ if(nrow(nextweek) > 0)
 
 if(nrow(upcoming) > 0)
 {
+  cat('\n')
+  cat("Mark your calendars for the following upcoming events:")
+  cat('\n')
   for (i in 1:nrow(upcoming)) {
     cat(paste0("  \n", "### ", upcoming[i, "summary"]))
     cat('\n')
