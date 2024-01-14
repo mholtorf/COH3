@@ -6,7 +6,7 @@
 #  push:
 #    branches: main
 
- on:
+on:
   schedule:
     - cron: '0 16 * * *' # Run every day at 4pm UTC
 
