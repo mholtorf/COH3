@@ -37,5 +37,5 @@ blastula::smtp_send(email_object,
             host = "smtp.gmail.com",
             port = 465,
             use_ssl = TRUE,
-            pass_envvar = Sys.getenv(GMAIL_APP_PASSWORD))
+            pass_envvar = Sys.getenv("GMAIL_APP_PASSWORD"))
             )
