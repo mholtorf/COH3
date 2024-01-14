@@ -26,9 +26,11 @@ library("blastula")
 email_object <- blastula::render_email(here::here("R","email_content.qmd"))
 #email_object <- blastula::render_email(here::here("R","email_content.Rmd"))
 
-# Send email
-blastula::smtp_send(email_object,
-          from = "megan.holtorf@gmail.com",
+# Send email if there's an even next week or any new updates
+if(nrow(nextweek) + nrow(updates) >=1)
+  blastula::smtp_send(email_object,
+          #from = "megan.holtorf@gmail.com",
+          from = "centraloregonhash@gmail.com",
           to = "megan.holtorf@gmail.com",
           subject = paste0("Central Oregon Hashes"),
           credentials = creds_envvar(

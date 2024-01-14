@@ -4,58 +4,102 @@ output: blastula::blastula_email
 editor: visual
 ---
 
-## This Week
-
 ```{r}
 #| echo: false
+#| warning: false
 
 #remotes::install_github("petermeissner/ical")
 
 library("ical")
 library("tidyverse")
 
-events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
+#events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
+
+events <- ical_parse_df("https://calendar.google.com/calendar/ical/cae3r4u2uhucmmi9rvq5eu6obg%40group.calendar.google.com/public/basic.ics")
 
 events <- 
   events %>%
   mutate(description = gsub("\n", "<br>", description),
          day = as.character(wday(dtstart, label = TRUE, abbr = FALSE)),
          date = format(dtstart, format = "%B %d"),
-         time = format(dtstart, format = "%I:%M %p")) %>%
+         time = format(dtstart, format = "%I:%M %p"),
+         location = if_else(is.na(location),
+                       "TBD",
+                       location),
+         description = if_else(is.na(description), 
+                          "Detrails to follow", 
+                          location)) %>%
   arrange(dtstart)
 
-week <- 
+nextweek <- 
   events %>%
-  filter(dtstart >= Sys.Date() &
-          dtstart < Sys.Date() + 7) 
+  mutate(difftime = difftime(as.Date(dtstart), 
+                    as.Date(Sys.Date()),
+                             units = "days")) %>%
+  filter(as.Date(dtstart) > Sys.Date() & # Future events
+           difftime(as.Date(dtstart), 
+                    as.Date(Sys.Date()), 
+                    units = "days") == 7) # Within next 10 days
+
+updates <- 
+  events %>%
+  filter(difftime(as.Date(dtstart), 
+                    as.Date(Sys.Date()),
+                  units = "days") < 10 & # Within next 10 days
+           difftime(last.modified, 
+                    Sys.Date(),
+                  units = "hours") > -24) # New updates in last 24 hours
 
 upcoming <- 
   events %>%
-  filter(dtstart >= Sys.Date() + 7) 
+  filter(dtstart >= Sys.Date() + 10) 
+```
+```{r}
+#| echo: FALSE
+#| results: 'asis'
+
+if(nrow(updates) > 0)
+  {
+  cat('## Late breaking updates!')
+  for (i in 1:nrow(updates)) {
+    cat(paste0("  \n", "### ", updates[i, "summary"]))
+    cat('\n')
+    cat("  \n", "**Date:**", updates[i, "day"], nextweek[i, "date"])
+    cat("  \n", "**Time:**", updates[i, "time"])
+    cat("  \n", "**Where:**", updates[i, "location"])
+    cat("  \n\n", updates[i, "description"])
+    cat('\n')
+    }
+  }
 ```
 
 ```{r}
 #| echo: FALSE
 #| results: 'asis'
 
-for (i in 1:nrow(week)) {
-  cat(paste0("  \n", "### ", week[i, "summary"]))
-  cat('\n')
-  cat("  \n", "**Date:**", week[i, "day"], week[i, "date"])
-  cat("  \n", "**Time:**", week[i, "time"])
-  cat("  \n", "**Where:**", week[i, "location"])
-  cat("  \n\n", week[i, "description"])
-  cat('\n')
+if(nrow(nextweek) > 0) 
+  {
+  cat('## Upcumming Hashes')
+  for (i in 1:nrow(nextweek)) {
+    cat(paste0("  \n", "### ", nextweek[i, "summary"]))
+    cat('\n')
+    cat("  \n", "**Date:**", nextweek[i, "day"], nextweek[i, "date"])
+    cat("  \n", "**Time:**", nextweek[i, "time"])
+    cat("  \n", "**Where:**", nextweek[i, "location"])
+    cat("  \n\n", nextweek[i, "description"])
+    cat('\n')
+    }
   }
 ```
 
-## Other Upcoming Events
+## Heads (who said head??) up!
 
 ```{r}
 #| echo: FALSE
 #| results: 'asis'
 
 if(nrow(upcoming) > 0)
+{
   for (i in 1:nrow(upcoming)) {
     cat(paste0("  \n", "### ", upcoming[i, "summary"]))
     cat('\n')
@@ -65,7 +109,7 @@ if(nrow(upcoming) > 0)
     cat("  \n\n", upcoming[i, "description"])
     cat('\n')
   }
-
-if(nrow(upcoming) == 0)
-  cat("No other upcoming events. [Sign up to hare!](https://sites.google.com/site/centraloregonhhh/home)")
+}else{
+    cat("No other upcoming events. [Sign up to hare!](https://sites.google.com/site/centraloregonhhh/home)")
+    }
 ```
