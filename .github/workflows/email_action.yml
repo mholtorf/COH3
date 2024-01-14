@@ -35,6 +35,8 @@ jobs:
           R -e 'renv::restore()'
 
       - name: Render email
-        run: Rscript -e 'source("R/send_email.R")'
+        run: |
+          source("R/send_email.R")
+        shell: Rscript {0} 
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
