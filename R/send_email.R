@@ -32,5 +32,10 @@ blastula::smtp_send(email_object,
           from = "megan.holtorf@gmail.com",
           to = "megan.holtorf@gmail.com",
           subject = paste0("Central Oregon Hashes"),
-          #credentials = creds_file(here::here("gmail_creds")))
-          credentials = creds_file(GMAIL_APP_PASSWORD))
+          credentials = creds_envvar(
+            user = "megan.holtorf@gmail.com",
+            host = "smtp.gmail.com",
+            port = 465,
+            use_ssl = TRUE,
+            pass_envvar = Sys.getenv(GMAIL_APP_PASSWORD))
+            )
