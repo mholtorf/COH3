@@ -30,11 +30,12 @@ email_object <- blastula::render_email(here::here("R","email_content.qmd"))
 if(nrow(nextweek) + nrow(updates) >=1)
   blastula::smtp_send(email_object,
           #from = "megan.holtorf@gmail.com",
-          from = "centraloregonhash@gmail.com",
+          from = c("COH3" = "centraloregonhash@gmail.com"),
           to = "megan.holtorf@gmail.com",
+          bcc = NULL,
           subject = paste0("Central Oregon Hashes"),
           credentials = creds_envvar(
-            user = "centraloregonhash@gmail.com",
+            user = "megan.holtorf@gmail.com",
             host = "smtp.gmail.com",
             port = 465,
             use_ssl = TRUE,
