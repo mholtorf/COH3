@@ -3,7 +3,7 @@ title: "Central Oregon Hashes"
 output: blastula::blastula_email
 editor: visual
 ---
-
+# Central Oregon Hashes
 ```{r}
 #| echo: false
 #| warning: false
@@ -13,7 +13,7 @@ editor: visual
 library("ical")
 library("tidyverse")
 
-#events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
+# events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
 
 events <- ical_parse_df("https://calendar.google.com/calendar/ical/cae3r4u2uhucmmi9rvq5eu6obg%40group.calendar.google.com/public/basic.ics")
 
@@ -100,7 +100,7 @@ if(nrow(nextweek) > 0)
 ```
 
 ## More shenanigans ahead!
-*(who said head??)*
+*(head? who said head??)*
 
 ```{r}
 #| echo: FALSE
@@ -121,6 +121,6 @@ if(nrow(upcoming) > 0)
     cat('\n')
   }
 }else{
-    cat("No other upcoming events. [Sign up to hare!](https://sites.google.com/site/centraloregonhhh/home)")
+  cat("No other upcoming events. [Sign up to hare!](mailto:centraloregonhash@gmail.com?subject=Interested%20in%20haring)")
     }
 ```

@@ -2,5 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-.html
+*.html
 gmail_creds
+email_content_files/
