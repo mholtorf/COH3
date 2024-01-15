@@ -32,19 +32,23 @@ events <-
          description = gsub("facebook\\.com/[a-zA-Z0-9._]+", "", description)) %>%
   arrange(dtstart)
 
+trigger <- 
+  events %>%
+  filter(difftime(as.Date(dtstart), 
+                    as.Date(Sys.Date()), 
+                    units = "days") == 10) # 10 days from now
+
 nextweek <- 
   events %>%
-  mutate(difftime = difftime(as.Date(dtstart), 
-                    as.Date(Sys.Date()),
-                             units = "days")) %>%
   filter(as.Date(dtstart) > Sys.Date() & # Future events
            difftime(as.Date(dtstart), 
                     as.Date(Sys.Date()), 
-                    units = "days") == 7) # Within next 10 days
+                    units = "days") <= 10) # Within next 10 days
 
 updates <- 
   events %>%
-  filter(difftime(as.Date(dtstart), 
+  filter(dtstart > Sys.Date(),
+         difftime(as.Date(dtstart), 
                     as.Date(Sys.Date()),
                   units = "days") < 10 & # Within next 10 days
            difftime(last.modified, 
@@ -55,6 +59,8 @@ upcoming <-
   events %>%
   filter(dtstart >= Sys.Date() + 10) 
 ```
+
+
 ```{r}
 #| echo: FALSE
 #| results: 'asis'
