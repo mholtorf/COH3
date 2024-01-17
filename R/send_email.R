@@ -41,3 +41,12 @@ if(nrow(trigger) + nrow(updates) >=1 )
             use_ssl = TRUE,
             pass_envvar = "GMAIL_APP_PASSWORD")
             )
+
+# blastula::smtp_send(email_object,
+#                     #from = "megan.holtorf@gmail.com",
+#                     from = c("COH3" = "centraloregonhash@gmail.com"),
+#                     to = "megan.holtorf@gmail.com",
+#                     bcc = NULL,
+#                     subject = paste0("Central Oregon Hashes"),
+#                     credentials = creds_file("gmail_creds")
+# )

@@ -2,6 +2,11 @@
 title: "Central Oregon Hashes"
 output: blastula::blastula_email
 editor: visual
+format: 
+  html:
+    theme: 
+    - default
+    - coh3_theme.scss
 ---
 # Central Oregon Hashes
 ```{r}
@@ -67,15 +72,19 @@ upcoming <-
 
 if(nrow(updates) > 0)
   {
-  cat('## Late breaking updates!')
+  cat('### ⚠️ Late breaking updates!')
   for (i in 1:nrow(updates)) {
-    cat(paste0("  \n", "### ", updates[i, "summary"]))
-    cat('\n')
+#    cat(paste0("  \n", "#### ", updates[i, "summary"]))
+    cat('  \n')
+    cat(paste0("  \n", 
+               '<span style="color:#8E2600;font-weight:bold">',
+               updates[i, "summary"],
+               '</span>'))
     cat("  \n", "**Date:**", updates[i, "day"], nextweek[i, "date"])
     cat("  \n", "**Time:**", updates[i, "time"])
     cat("  \n", "**Where:**", updates[i, "location"])
     cat("  \n\n", updates[i, "description"])
-    cat('\n')
+    #cat('\n')
     }
   }
 ```
@@ -86,10 +95,14 @@ if(nrow(updates) > 0)
 
 if(nrow(nextweek) > 0) 
   {
-  cat('## Cumming soon...')
+  cat('### 👣 Cumming soon...')
   for (i in 1:nrow(nextweek)) {
-    cat(paste0("  \n", "### ", nextweek[i, "summary"]))
-    cat('\n')
+   # cat(paste0("  \n", "#### ", nextweek[i, "summary"]))
+    cat('  \n')
+    cat(paste0("  \n", 
+               '<span style="color:#8E2600;font-weight:bold">',
+               nextweek[i, "summary"],
+               '</span>'))
     cat("  \n", "**Date:**", nextweek[i, "day"], nextweek[i, "date"])
     cat("  \n", "**Time:**", nextweek[i, "time"])
     cat("  \n", "**Where:**", nextweek[i, "location"])
@@ -99,7 +112,7 @@ if(nrow(nextweek) > 0)
   }
 ```
 
-## More shenanigans ahead!
+### 📆 More shenanigans ahead!
 *(head? who said head??)*
 
 ```{r}
@@ -109,11 +122,15 @@ if(nrow(nextweek) > 0)
 if(nrow(upcoming) > 0)
 {
   cat('\n')
-  cat("Mark your calendars for the following upcoming events:")
+  cat("Mark your calendars or risk the FOMO")
   cat('\n')
   for (i in 1:nrow(upcoming)) {
-    cat(paste0("  \n", "### ", upcoming[i, "summary"]))
+    #cat(paste0("  \n", "#### ", upcoming[i, "summary"]))
     cat('\n')
+    cat(paste0("  \n", 
+               '<span style="color:#8E2600;font-weight:bold">',
+               upcoming[i, "summary"],
+               '</span>'))
     cat("  \n", "**Date:**", upcoming[i, "day"], upcoming[i, "date"])
     cat("  \n", "**Time:**", upcoming[i, "time"])
     cat("  \n", "**Where:**", upcoming[i, "location"])
