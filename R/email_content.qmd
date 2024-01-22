@@ -18,9 +18,9 @@ format:
 library("ical")
 library("tidyverse")
 
-events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
+# events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
 
-# events <- ical_parse_df("https://calendar.google.com/calendar/ical/cae3r4u2uhucmmi9rvq5eu6obg%40group.calendar.google.com/public/basic.ics")
+events <- ical_parse_df("https://calendar.google.com/calendar/ical/cae3r4u2uhucmmi9rvq5eu6obg%40group.calendar.google.com/public/basic.ics")
 
 events <- 
   events %>%
