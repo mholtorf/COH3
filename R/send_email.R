@@ -1,14 +1,27 @@
 # Load blastula package
 library("blastula")
 
-# # Create file containing credentials for email account
-# blastula::create_smtp_creds_key(
-#   id = "gmail",
-#   user = "megan.holtorf@gmail.com",
-#   host = "smtp.gmail.com",
-#   port = 465,
-#   use_ssl = TRUE
-# )
+# Generate the email object using blastula
+email_object <- blastula::render_email(here::here("R","email_content.qmd"))
+
+# Send email if there's an even next week or any new updates
+if(nrow(trigger) + nrow(updates) >=1 )
+  blastula::smtp_send(email_object,
+          from = c("COH3" = "centraloregonhash@gmail.com"),
+          to = "centraloregonhash@gmail.com",
+          bcc = "centraloregonh3@googlegroups.com",
+          subject = paste0("Central Oregon Hashes"),
+          credentials = creds_envvar(
+            user = "megan.holtorf@gmail.com", # Update if transferred to new owner
+            host = "smtp.gmail.com",
+            port = 465,
+            use_ssl = TRUE,
+            pass_envvar = "GMAIL_APP_PASSWORD") # Points to a GitHub secret with Google App password, update is owner changes
+            )
+
+#===============================================================================
+# Uncomment code below for local testing using a creds file
+#===============================================================================
 
 # Store SMTP credentials as a file with the filename "gmail_creds"
 # To use gmail, go to My Account Help page and search for App passwords
@@ -21,32 +34,13 @@ library("blastula")
 #   port = 465,
 #   use_ssl = TRUE
 # )
-
-# Generate the email object using blastula
-email_object <- blastula::render_email(here::here("R","email_content.qmd"))
-#email_object <- blastula::render_email(here::here("R","email_content.Rmd"))
-
-# Send email if there's an even next week or any new updates
-if(nrow(trigger) + nrow(updates) >=1 )
-  blastula::smtp_send(email_object,
-          #from = "megan.holtorf@gmail.com",
-          from = c("COH3" = "centraloregonhash@gmail.com"),
-          to = "megan.holtorf@gmail.com",
-          bcc = NULL,
-          subject = paste0("Central Oregon Hashes"),
-          credentials = creds_envvar(
-            user = "megan.holtorf@gmail.com",
-            host = "smtp.gmail.com",
-            port = 465,
-            use_ssl = TRUE,
-            pass_envvar = "GMAIL_APP_PASSWORD")
-            )
-
-# blastula::smtp_send(email_object,
-#                     #from = "megan.holtorf@gmail.com",
-#                     from = c("COH3" = "centraloregonhash@gmail.com"),
-#                     to = "megan.holtorf@gmail.com",
-#                     bcc = NULL,
+# 
+# if(nrow(trigger) + nrow(updates) >=1 )
+#   blastula::smtp_send(email_object,
+#                       from = c("COH3" = "centraloregonhash@gmail.com"),
+#                       #to = "megan.holtorf@gmail.com",
+#                       to = "centraloregonhash@gmail.com",
+#                       bcc = "centraloregonh3@googlegroups.com",
 #                     subject = paste0("Central Oregon Hashes"),
 #                     credentials = creds_file("gmail_creds")
 # )
