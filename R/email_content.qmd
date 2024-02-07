@@ -8,7 +8,9 @@ format:
     - default
     - coh3_theme.scss
 ---
+
 # Central Oregon Hashes
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -67,10 +69,10 @@ nextweek <-
 # Identify events happening 10 days from now
 upcoming <- 
   events %>%
-  filter(dtstart >= Sys.Date() + 10)
+  filter(dtstart > Sys.Date() + 10 &
+         !uid %in% nextweek$uid)
 
 ```
-
 
 ```{r}
 #| echo: FALSE
@@ -103,8 +105,6 @@ if(nrow(updates) > 0) {
 
 ```
 
-
-
 ```{r}
 #| echo: FALSE
 #| results: 'asis'
@@ -134,7 +134,8 @@ if(nrow(nextweek) > 0) {
 
 ```
 
-### 📆 More shenanigans ahead! 
+### 📆 More shenanigans ahead!
+
 <sub>*(head? who said head??)*<sub>
 
 ```{r}
@@ -169,6 +170,6 @@ if(nrow(upcoming) > 0) {
 
 ```
 
----
+------------------------------------------------------------------------
 
-> For up to the minute detrails, add the COH3 calendar to your own calendar using [Google](https://calendar.google.com/calendar/u/0/r?cid=6ureum96qhgf13kj820i61ovq8@group.calendar.google.com) or [iCal](https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics) for iOS users. Or join us on [Facebook](https://www.facebook.com/groups/527235744035261/). 
+> For up to the minute detrails, add the COH3 calendar to your own calendar using [Google](https://calendar.google.com/calendar/u/0/r?cid=6ureum96qhgf13kj820i61ovq8@group.calendar.google.com) or [iCal](https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics) for iOS users. Or join us on [Facebook](https://www.facebook.com/groups/527235744035261/).

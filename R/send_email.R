@@ -9,7 +9,8 @@ if(nrow(trigger) + nrow(updates) >=1 )
   blastula::smtp_send(email_object,
           from = c("COH3" = "centraloregonhash@gmail.com"),
           to = "centraloregonhash@gmail.com",
-          bcc = "centraloregonh3@googlegroups.com",
+          bcc = c("centraloregonh3@googlegroups.com",
+                  "megan.holtorf@gmail.com"), # include the user, Google groups won't send directly to sender.
           subject = paste0("Central Oregon Hashes"),
           credentials = creds_envvar(
             user = "megan.holtorf@gmail.com", # Update if transferred to new owner
