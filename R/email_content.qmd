@@ -36,6 +36,7 @@ events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf1
 events <- 
   events %>%
   mutate(description = gsub("\n", "<br>", description),
+         dtstart = lubridate::with_tz(dtstart, "America/Los_Angeles"),
          day = as.character(wday(dtstart, label = TRUE, abbr = FALSE)),
          date = format(dtstart, format = "%B %d"),
          time = format(dtstart, format = "%I:%M %p"),
