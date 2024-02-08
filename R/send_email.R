@@ -5,7 +5,7 @@ library("blastula")
 email_object <- blastula::render_email(here::here("R","email_content.qmd"))
 
 # Send email if there's an even next week or any new updates
-if(nrow(trigger) + nrow(updates) >=1 )
+if(nrow(trigger_2) + nrow(trigger_10) + nrow(updates) >=1 )
   blastula::smtp_send(email_object,
           from = c("COH3" = "centraloregonhash@gmail.com"),
           to = "centraloregonhash@gmail.com",

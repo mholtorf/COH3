@@ -2,11 +2,6 @@
 title: "Central Oregon Hashes"
 output: blastula::blastula_email
 editor: visual
-format: 
-  html:
-    theme: 
-    - default
-    - coh3_theme.scss
 ---
 
 # Central Oregon Hashes
@@ -19,6 +14,7 @@ format:
 # Ensure that the 'ical' and 'tidyverse' libraries are installed before running this code.
 
 # remotes::install_github("petermeissner/ical")
+
 
 library("ical") 
 library("tidyverse")
@@ -41,22 +37,37 @@ events <-
          date = format(dtstart, format = "%B %d"),
          time = format(dtstart, format = "%I:%M %p"),
          location = if_else(is.na(location), "TBD", location),
-         description = if_else(is.na(description), "Details to follow", description)) %>%
+         description = if_else(is.na(description), "Details to follow", description),
+         daysuntill = as.numeric(difftime(as.Date(dtstart), as.Date(Sys.Date()), units = "days"))) %>%
   arrange(dtstart)
 
 # Identify events triggering in 10 days
-trigger <- 
+trigger_10 <- 
   events %>%
-  filter(difftime(as.Date(dtstart), as.Date(Sys.Date()), units = "days") == 10)
+  filter(daysuntill == 10)
+
+# Identify events triggering in 10 days
+trigger_2 <- 
+  events %>%
+  filter(daysuntill == 2)
 
 # Identify events with updates:
-# - Upcoming events within the next 10 days
+# - Upcoming events within the next 2 days
 # - Events with new updates in the last 24 hours
 updates <- 
   events %>%
   filter(dtstart > Sys.Date(),
-         difftime(as.Date(dtstart), as.Date(Sys.Date()), units = "days") < 10 &
-         difftime(last.modified, Sys.Date(), units = "hours") > -24)
+         daysuntill < 2 &
+         difftime(last.modified, Sys.Date(), units = "days") > -10)
+
+# Identify events happening next two days:
+# - Future events within the next 2 days
+# - Exclude events already marked with updates
+twoday <- 
+  events %>%
+  filter(as.Date(dtstart) > Sys.Date() &
+         daysuntill == 2 &
+         !uid %in% updates$uid) 
 
 # Identify events happening next week:
 # - Future events within the next 10 days
@@ -64,14 +75,17 @@ updates <-
 nextweek <- 
   events %>%
   filter(as.Date(dtstart) > Sys.Date() &
-         difftime(as.Date(dtstart), as.Date(Sys.Date()), units = "days") <= 10 &
-         !uid %in% updates$uid) 
+         daysuntill <= 10 &
+         !uid %in% updates$uid &
+         !uid %in% twoday$uid) 
+
 
 # Identify events happening 10 days from now
 upcoming <- 
   events %>%
   filter(dtstart > Sys.Date() + 10 &
-         !uid %in% nextweek$uid)
+         !uid %in% nextweek$uid &
+         !uid %in% twoday$uid)
 
 ```
 
@@ -97,8 +111,37 @@ if(nrow(updates) > 0) {
     # Display event details including date, time, location, and description
     cat("  \n", "**Date:**", updates[i, "day"], updates[i, "date"])
     cat("  \n", "**Time:**", updates[i, "time"])
-    cat("  \n", "**Where:**", updates[i, "location"])
-    cat("  \n\n", updates[i, "description"])
+    cat("  \n", "**Where:**", updates[i, "location"], "\n")
+    cat("  \n", updates[i, "description"], "\n")
+    cat('\n')
+  }
+  cat('---')
+}
+
+```
+
+```{r}
+#| echo: FALSE
+#| results: 'asis'
+
+# Display upcoming events information if there are any events next week
+if(nrow(twoday) > 0) {
+  cat('### ⏰ Just a reminder')
+
+  # Iterate through each upcoming event and format the display
+  for (i in 1:nrow(twoday)) {
+    # Display the event summary with bold orange color
+    cat('  \n')
+    cat(paste0("  \n", 
+               '<span style="color:#8E2600;font-weight:bold">',
+               twoday[i, "summary"],
+               '</span>'))
+    
+    # Display event details including date, time, location, and description
+    cat("  \n", "**Date:**", twoday[i, "day"], twoday[i, "date"])
+    cat("  \n", "**Time:**", twoday[i, "time"])
+    cat("  \n", "**Where:**", twoday[i, "location"], "\n")
+    cat("  \n", twoday[i, "description"], "\n")
     cat('\n')
   }
   cat('---')
@@ -117,7 +160,9 @@ if(nrow(nextweek) > 0) {
   # Iterate through each upcoming event and format the display
   for (i in 1:nrow(nextweek)) {
     # Display the event summary with bold orange color
-    cat('  \n')
+    cat('\n')
+    
+    # Display the event summary with bold red color
     cat(paste0("  \n", 
                '<span style="color:#8E2600;font-weight:bold">',
                nextweek[i, "summary"],
@@ -126,8 +171,8 @@ if(nrow(nextweek) > 0) {
     # Display event details including date, time, location, and description
     cat("  \n", "**Date:**", nextweek[i, "day"], nextweek[i, "date"])
     cat("  \n", "**Time:**", nextweek[i, "time"])
-    cat("  \n", "**Where:**", nextweek[i, "location"])
-    cat("  \n\n", nextweek[i, "description"])
+    cat("  \n", "**Where:**", nextweek[i, "location"], "\n")
+    cat("  \n", nextweek[i, "description"], "\n")
     cat('\n')
   }
   cat('---')
@@ -160,8 +205,8 @@ if(nrow(upcoming) > 0) {
     # Display event details including date, time, location, and description
     cat("  \n", "**Date:**", upcoming[i, "day"], upcoming[i, "date"])
     cat("  \n", "**Time:**", upcoming[i, "time"])
-    cat("  \n", "**Where:**", upcoming[i, "location"])
-    cat("  \n\n", upcoming[i, "description"])
+    cat("  \n", "**Where:**", upcoming[i, "location"], "\n")
+    cat("  \n", upcoming[i, "description"], "\n")
     cat('\n')
   }
 } else {
