@@ -15,7 +15,6 @@ editor: visual
 
 # remotes::install_github("petermeissner/ical")
 
-
 library("ical") 
 library("tidyverse")
 
@@ -32,10 +31,14 @@ events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf1
 events <- 
   events %>%
   mutate(description = gsub("\n", "<br>", description),
-         dtstart = lubridate::with_tz(dtstart, "America/Los_Angeles"),
+         dtstart = if_else(hour(dtstart) == 0 & hour(dtend) == 0,
+                           dtstart, 
+                           dtstart - hours(8)),
          day = as.character(wday(dtstart, label = TRUE, abbr = FALSE)),
          date = format(dtstart, format = "%B %d"),
-         time = format(dtstart, format = "%I:%M %p"),
+         time = if_else(hour(dtstart) == 0 & hour(dtend) == 0,
+                           "TBD", 
+                        format(dtstart, format = "%I:%M %p")),
          location = if_else(is.na(location), "TBD", location),
          description = if_else(is.na(description), "Details to follow", description),
          daysuntill = as.numeric(difftime(as.Date(dtstart), as.Date(Sys.Date()), units = "days"))) %>%
@@ -58,7 +61,7 @@ updates <-
   events %>%
   filter(dtstart > Sys.Date(),
          daysuntill < 2 &
-         difftime(last.modified, Sys.Date(), units = "days") > -10)
+         difftime(last.modified, Sys.Date(), units = "hours") > -24)
 
 # Identify events happening next two days:
 # - Future events within the next 2 days
