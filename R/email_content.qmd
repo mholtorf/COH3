@@ -17,6 +17,7 @@ editor: visual
 
 library("ical") 
 library("tidyverse")
+library("stringi")
 
 # Parse events from the specified Google Calendar URL
 events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics")
@@ -33,7 +34,8 @@ events <-
   mutate(description = gsub("\n", "<br>", description),
          dtstart = if_else(hour(dtstart) == 0 & hour(dtend) == 0,
                            dtstart, 
-                           dtstart - hours(8)),
+                           #convert dtstart from GMT to PST or PDT
+                           with_tz(dtstart, tzone = "America/Los_Angeles")),
          day = as.character(wday(dtstart, label = TRUE, abbr = FALSE)),
          date = format(dtstart, format = "%B %d"),
          time = if_else(hour(dtstart) == 0 & hour(dtend) == 0,
@@ -41,7 +43,22 @@ events <-
                         format(dtstart, format = "%I:%M %p")),
          location = if_else(is.na(location), "TBD", location),
          description = if_else(is.na(description), "Details to follow", description),
-         daysuntill = as.numeric(difftime(as.Date(dtstart), as.Date(Sys.Date()), units = "days"))) %>%
+         # find the location of the last <br> in the description field that comes before the string "email group" and replace everything after it with a space.
+         emailgroup_location = str_locate(description, "email group"),
+         last_br_before_email = 
+           stri_locate_last_fixed(substr(description, 
+                                         1,      
+                                         emailgroup_location[, "start"]),
+                                  "<br>"),
+         description = if_else(is.na(last_br_before_email[, "start"]),
+                               description,
+                               substr(description, 
+                                      1,
+                                      last_br_before_email[, "start"]-1)
+                               ),
+         daysuntill = as.numeric(difftime(as.Date(dtstart), 
+                                          as.Date(Sys.Date()),
+                                          units = "days"))) %>%
   arrange(dtstart)
 
 # Identify events triggering in 10 days
@@ -221,4 +238,4 @@ if(nrow(upcoming) > 0) {
 
 ------------------------------------------------------------------------
 
-> For up to the minute detrails, add the COH3 calendar to your own calendar using [Google](https://calendar.google.com/calendar/u/0/r?cid=6ureum96qhgf13kj820i61ovq8@group.calendar.google.com) or [iCal](https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics) for iOS users. Or join us on [Facebook](https://www.facebook.com/groups/527235744035261/).
+> For up to the minute detrails, add the COH3 calendar to your own calendar using [Google](https://calendar.google.com/calendar/u/0/r?cid=6ureum96qhgf13kj820i61ovq8@group.calendar.google.com) or [iCal](https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics) for iOS users. Or join us on [Facebook](https://www.facebook.com/groups/527235744035261/) and [WhatsApp](https://chat.whatsapp.com/JXtmP6IyNlm9q8H7sidqH5).
