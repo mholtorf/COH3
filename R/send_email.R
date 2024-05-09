@@ -1,5 +1,5 @@
 # Load blastula package
-if(require("blastula")) install.packages("blastula")
+if(!require("blastula")) install.packages("blastula")
 library("blastula")
 
 # Generate the email object using blastula
@@ -37,12 +37,13 @@ if(nrow(trigger_2) + nrow(trigger_10) + nrow(updates) >=1 )
 #   use_ssl = TRUE
 # )
 # 
-# if(nrow(trigger) + nrow(updates) >=1 )
+# if(nrow(trigger_2) + nrow(trigger_10) + nrow(updates) >=1 )
 #   blastula::smtp_send(email_object,
 #                       from = c("COH3" = "centraloregonhash@gmail.com"),
 #                       #to = "megan.holtorf@gmail.com",
 #                       to = "centraloregonhash@gmail.com",
-#                       bcc = "centraloregonh3@googlegroups.com",
+# bcc = c("centraloregonh3@googlegroups.com",
+#         "megan.holtorf@gmail.com"), # include the user, Google groups won't send directly to sender.
 #                     subject = paste0("Central Oregon Hashes"),
 #                     credentials = creds_file("gmail_creds")
 # )
