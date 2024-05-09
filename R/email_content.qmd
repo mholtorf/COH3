@@ -13,9 +13,9 @@ editor: visual
 # This code uses the 'ical' library to parse events from a Google Calendar and perform various data manipulations. Install from GitHub as the CRAN version does not import creation dates.
 # Ensure that the 'ical' and 'tidyverse' libraries are installed before running this code.
 
-if(!require("ical")) remotes::install_github("petermeissner/ical")
-if(!require("tidyverse")) install.packages("tidyverse")
-if(!require("stringi")) install.packages("stringi")
+if(!require(ical)) remotes::install_github("petermeissner/ical")
+if(!require(tidyverse)) install.packages("tidyverse")
+if(!require(stringi)) install.packages("stringi")
 
 library("ical") 
 library("tidyverse")
