@@ -14,6 +14,8 @@ editor: visual
 # Ensure that the 'ical' and 'tidyverse' libraries are installed before running this code.
 
 if(require("ical")) remotes::install_github("petermeissner/ical")
+if(require("tidyverse")) install.packages("tidyverse")
+if(require("stringi")) install.packages("stringi")
 
 library("ical") 
 library("tidyverse")
