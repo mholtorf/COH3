@@ -1,5 +1,6 @@
 # Load blastula package
-if(!require(blastula)) install.packages("blastula")
+#if(!require(blastula)) 
+  install.packages("blastula")
 library("blastula")
 
 # Generate the email object using blastula
