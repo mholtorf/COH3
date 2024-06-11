@@ -20,6 +20,8 @@ editor: visual
 #if(!require(stringi)) 
 #  install.packages("stringi")
 
+# Sys.setenv(TZ='GMT') # Uncomment to test on GitHub Action timezone
+
 library("ical") 
 library("tidyverse")
 library("stringi")
@@ -37,10 +39,11 @@ events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf1
 events <- 
   events %>%
   mutate(description = gsub("\n", "<br>", description),
-         dtstart = if_else(hour(dtstart) == 0 & hour(dtend) == 0,
-                           dtstart, 
-                           #convert dtstart from GMT to PST or PDT
-                           with_tz(dtstart, tzone = "America/Los_Angeles")),
+         dtstart = 
+           if_else(hour(dtstart) == 0 & hour(dtend) == 0,
+                   # convert dtstart from GMT to PST or PDT
+                   lubridate::force_tz(dtstart, tzone = "America/Los_Angeles"),
+                   dtstart),
          day = as.character(wday(dtstart, label = TRUE, abbr = FALSE)),
          date = format(dtstart, format = "%B %d"),
          time = if_else(hour(dtstart) == 0 & hour(dtend) == 0,
