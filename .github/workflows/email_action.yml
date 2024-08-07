@@ -18,6 +18,9 @@ jobs:
     
       - name: Check out repository
         uses: actions/checkout@v3
+        
+      - name: Workflow Keepalive
+        uses: liskin/gh-workflow-keepalive@v1.2.1            
                 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
