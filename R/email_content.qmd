@@ -72,7 +72,7 @@ events <-
 # Identify events triggering in 10 days
 trigger_10 <- 
   events %>%
-  filter(daysuntill == 10)
+  filter(daysuntill == 9)
 
 # Identify events triggering in 10 days
 trigger_2 <- 
