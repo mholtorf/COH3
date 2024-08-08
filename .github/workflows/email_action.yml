@@ -2,13 +2,13 @@
 #  schedule:
 #    - cron: '0 10 * * 1' # Run every Monday at 10 am UTC
 
-on:
- push:
-   branches: main
-
 # on:
-#  schedule:
-#    - cron: '0 16 * * *' # Run every day at 4pm UTC
+# push:
+#   branches: main
+
+on:
+ schedule:
+   - cron: '0 16 * * *' # Run every day at 4pm UTC
 
 jobs:
   run_email_sender:
