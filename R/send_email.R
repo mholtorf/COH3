@@ -1,5 +1,5 @@
 # Load blastula package
-#if(!require(blastula)) 
+# if(!require(blastula)) 
 #  install.packages("blastula")
 library("blastula")
 
