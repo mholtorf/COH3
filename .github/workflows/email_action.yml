@@ -2,13 +2,13 @@
 #  schedule:
 #    - cron: '0 10 * * 1' # Run every Monday at 10 am UTC
 
-on:
- push:
-  branches: main
-
 # on:
-# schedule:
-#   - cron: '0 16 * * *' # Run every day at 4pm UTC
+#  push:
+#   branches: main
+
+on:
+ schedule:
+  - cron: '0 16 * * *' # Run every day at 4pm UTC
 
 jobs:
   run_email_sender:
@@ -19,9 +19,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         
-#      - name: Workflow Keepalive
-#        uses: liskin/gh-workflow-keepalive@v1.2.1            
-                
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
       
@@ -47,3 +44,12 @@ jobs:
         shell: Rscript {0} 
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+
+  keepalive-job:
+    name: Keepalive Workflow
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@v2
