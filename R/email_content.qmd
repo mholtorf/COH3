@@ -23,7 +23,9 @@ editor: visual
 # Sys.setenv(TZ='GMT') # Uncomment to test on GitHub Action timezone
 
 library("ical") 
-library("tidyverse")
+library("dplyr")
+library("lubridate")
+library("stringr")
 library("stringi")
 
 # Parse events from the specified Google Calendar URL
@@ -37,7 +39,7 @@ events <- ical_parse_df("https://calendar.google.com/calendar/ical/6ureum96qhgf1
 # - Set default values for missing location and description
 # - Sort events by start date
 events <- 
-  events %>%
+  events |>
   mutate(description = gsub("\n", "<br>", description),
          dtstart = 
            if_else(hour(dtstart) == 0 & hour(dtend) == 0,
@@ -66,24 +68,24 @@ events <-
                                ),
          daysuntill = as.numeric(difftime(as.Date(dtstart), 
                                           as.Date(Sys.Date()),
-                                          units = "days"))) %>%
+                                          units = "days"))) |>
   arrange(dtstart)
 
 # Identify events triggering in 10 days
 trigger_10 <- 
-  events %>%
+  events |>
   filter(daysuntill == 10)
 
 # Identify events triggering in 10 days
 trigger_2 <- 
-  events %>%
+  events |>
   filter(daysuntill == 2)
 
 # Identify events with updates:
 # - Upcoming events within the next 2 days
 # - Events with new updates in the last 24 hours
 updates <- 
-  events %>%
+  events |>
   filter(dtstart > Sys.Date(),
          daysuntill < 2 &
          difftime(last.modified, Sys.Date(), units = "hours") > -24)
@@ -92,7 +94,7 @@ updates <-
 # - Future events within the next 2 days
 # - Exclude events already marked with updates
 twoday <- 
-  events %>%
+  events |>
   filter(as.Date(dtstart) > Sys.Date() &
          daysuntill == 2 &
          !uid %in% updates$uid) 
@@ -101,7 +103,7 @@ twoday <-
 # - Future events within the next 10 days
 # - Exclude events already marked with updates
 nextweek <- 
-  events %>%
+  events |>
   filter(as.Date(dtstart) > Sys.Date() &
          daysuntill <= 10 &
          !uid %in% updates$uid &
@@ -110,7 +112,7 @@ nextweek <-
 
 # Identify events happening 10 days from now
 upcoming <- 
-  events %>%
+  events |>
   filter(dtstart > Sys.Date() + 10 &
          !uid %in% nextweek$uid &
          !uid %in% twoday$uid)
