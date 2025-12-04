@@ -156,7 +156,7 @@ if(nrow(updates) > 0) {
 
 # Display upcoming events information if there are any events next week
 if(nrow(twoday) > 0) {
-  cat('### ⏰ Just a reminder')
+  cat('### ⏰ Reminder)
 
   # Iterate through each upcoming event and format the display
   for (i in 1:nrow(twoday)) {
@@ -249,3 +249,5 @@ if(nrow(upcoming) > 0) {
 ------------------------------------------------------------------------
 
 > For up to the minute detrails, add the COH3 calendar to your own calendar using [Google](https://calendar.google.com/calendar/u/0/r?cid=6ureum96qhgf13kj820i61ovq8@group.calendar.google.com) or [iCal](https://calendar.google.com/calendar/ical/6ureum96qhgf13kj820i61ovq8%40group.calendar.google.com/public/basic.ics) for iOS users. Or join us on [Facebook](https://www.facebook.com/groups/527235744035261/) and [WhatsApp](https://chat.whatsapp.com/JXtmP6IyNlm9q8H7sidqH5).
+>
+> If you received this email from a friend and want to receive future updates, join our [Google Group](https://groups.google.com/g/centraloregonh3).
