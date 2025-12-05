@@ -156,7 +156,7 @@ if(nrow(updates) > 0) {
 
 # Display upcoming events information if there are any events next week
 if(nrow(twoday) > 0) {
-  cat('### ⏰ Reminder)
+  cat('### ⏰ Reminder')
 
   # Iterate through each upcoming event and format the display
   for (i in 1:nrow(twoday)) {
